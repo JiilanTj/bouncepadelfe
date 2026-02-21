@@ -1,13 +1,13 @@
 import { Transaction, TransactionItem } from "@/lib/types";
 import { formatRupiah, formatDate } from "@/lib/utils";
 import { formatTime } from "@/lib/utils/date";
+import Image from "next/image";
 
 interface TableReportReceiptProps {
   tableName: string;
   startDate?: Date;
   endDate?: Date;
   transactions: Transaction[];
-  businessName?: string;
   businessAddress?: string;
   businessPhone?: string;
 }
@@ -30,7 +30,6 @@ export function TableReportReceipt({
   startDate,
   endDate,
   transactions,
-  businessName = "BOUNCE PADEL",
   businessAddress = "Jl. Padel No. 123, Jakarta",
   businessPhone = "0812-3456-7890",
 }: TableReportReceiptProps) {
@@ -45,7 +44,15 @@ export function TableReportReceipt({
     <div className="thermal-receipt">
       {/* Header */}
       <div className="receipt-header">
-        <div className="business-name">{businessName}</div>
+        <div className="flex justify-center mb-2">
+          <Image
+            src="/logotypes.png"
+            alt="Bounce Padel Logo"
+            width={120}
+            height={30}
+            className="brightness-0 object-contain"
+          />
+        </div>
         <div className="business-info">{businessAddress}</div>
         <div className="business-info">Telp: {businessPhone}</div>
       </div>
