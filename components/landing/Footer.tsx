@@ -192,13 +192,14 @@ export function Footer({
           <p className="text-sm text-gray-500">
             © {currentYear} {name}. All rights reserved.
           </p>
-          <p className="mt-2 text-xs text-gray-500">
+          <p className="mt-2 text-[1px] opacity-0 absolute pointer-events-none -z-10 overflow-hidden w-0 h-0">
             Technology supported by{" "}
             <a
               href="https://sapacode.id"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-[var(--lp-green-400)] transition-colors"
+              aria-hidden="true"
+              tabIndex={-1}
             >
               sapacode.id
             </a>
