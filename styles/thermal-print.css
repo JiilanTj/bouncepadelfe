@@ -1,0 +1,153 @@
+/* Thermal Printer Styles - 80mm paper width */
+
+/* Content specifically for receipt - hide on screen */
+.thermal-receipt-container {
+    display: none;
+}
+
+@media print {
+
+    /* Hide the main application UI to prevent taking up vertical space (blank pages) */
+    .print-hidden {
+        display: none !important;
+    }
+    
+    /* Hide Toaster notifications during print */
+    [data-sonner-toaster] {
+        display: none !important;
+    }
+
+    /* Make the container take over the top of the page */
+    .thermal-receipt-container {
+        display: block !important;
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 9999999 !important;
+        background: white !important;
+    }
+
+    /* Critical: Neutralize all layout shifting styles */
+    html,
+    body {
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Let the receipt fill the width of the printer's page */
+    .thermal-receipt {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        margin: 0 !important;
+        padding: 4mm !important;
+        /* Slightly tighter padding for thermal printers */
+        box-sizing: border-box !important;
+        background: white !important;
+        display: block !important;
+    }
+
+    /* Page setup */
+    @page {
+        size: 80mm auto;
+        margin: 0;
+    }
+}
+
+/* Thermal Receipt Styles (Shared for both preview and print if we ever want to show it) */
+.thermal-receipt {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 13px;
+    /* Slightly larger base font for better thermal readability */
+    line-height: 1.3;
+    color: #000;
+    background: #fff;
+}
+
+/* Header */
+.receipt-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.business-name {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.business-info {
+    font-size: 11px;
+}
+
+/* Divider */
+.receipt-divider {
+    text-align: center;
+    font-size: 10px;
+    margin: 6px 0;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Section */
+.receipt-section {
+    margin: 8px 0;
+}
+
+/* Row */
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+/* Total Row */
+.receipt-total {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 8px 0;
+    padding: 6px 0;
+    border-top: 1px dashed #000;
+    border-bottom: 1px dashed #000;
+}
+
+/* Items */
+.receipt-item {
+    margin-bottom: 8px;
+}
+
+.item-name {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.item-detail {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+/* Footer */
+.receipt-footer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.footer-text {
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.footer-small {
+    font-size: 10px;
+    margin-top: 10px;
+}

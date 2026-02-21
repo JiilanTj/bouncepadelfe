@@ -1,0 +1,42 @@
+/* ============================================
+   Landing Page — Custom Color Palette
+   Deeper, richer green tones for premium feel
+   ============================================ */
+
+:root {
+    /* Primary Greens — deeper & richer */
+    --lp-green-50: #e8f5e9;
+    --lp-green-100: #c8e6c9;
+    --lp-green-200: #a5d6a7;
+    --lp-green-300: #66bb6a;
+    --lp-green-400: #43a047;
+    --lp-green-500: #2e7d32;
+    --lp-green-600: #1b5e20;
+    --lp-green-700: #134517;
+    --lp-green-800: #0d3311;
+    --lp-green-900: #0a2a0d;
+
+    /* Accent — warm gold for contrast */
+    --lp-gold: #d4a843;
+    --lp-gold-light: #e8c66a;
+
+    /* Neutrals */
+    --lp-dark: #0f1a12;
+    --lp-text: #1a2e1e;
+    --lp-text-muted: #4a6350;
+    --lp-bg: #fafcfa;
+}
+
+/* Footer hover effects (CSS-only, no JS event handlers needed) */
+.lp-footer-link:hover {
+    color: var(--lp-green-300) !important;
+}
+
+.lp-social-icon {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.lp-social-icon:hover {
+    background: var(--lp-green-500);
+    color: white !important;
+}
