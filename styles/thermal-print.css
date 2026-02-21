@@ -11,9 +11,23 @@
     .print-hidden {
         display: none !important;
     }
-    
+
     /* Hide Toaster notifications during print */
     [data-sonner-toaster] {
+        display: none !important;
+    }
+
+    /* Hide Radix UI Dialogs (like the print modal itself) */
+    [data-radix-portal],
+    [data-slot="dialog-portal"],
+    [data-slot="dialog-overlay"],
+    [data-slot="dialog-content"] {
+        display: none !important;
+    }
+
+    /* Hide TanStack React Query Devtools */
+    .tsqd-parent-container,
+    [aria-label="Open React Query Devtools"] {
         display: none !important;
     }
 
