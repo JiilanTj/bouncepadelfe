@@ -118,3 +118,20 @@ export function useAyoFieldsQuery() {
     });
 }
 
+export function useMapAyoFieldMutation() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ courtId, ayoFieldId }: { courtId: string; ayoFieldId: number | string }) =>
+            courtsService.mapAyoField(courtId, ayoFieldId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: COURTS_QUERY_KEY });
+            queryClient.invalidateQueries({ queryKey: ["ayo-fields"] });
+            toast.success("Successfully mapped court to Ayo.co.id field");
+        },
+        onError: (error: AxiosError<ApiErrorResponse>) => {
+            console.error("Map Ayo Field error:", error);
+            toast.error(error.response?.data?.message || "Failed to map court to Ayo field");
+        }
+    });
+}

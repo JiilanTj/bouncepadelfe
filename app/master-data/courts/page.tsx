@@ -24,7 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CourtTable } from "@/components/courts/CourtTable";
 import { CourtFormDialog } from "@/components/courts/CourtFormDialog";
 import { CourtDeleteDialog } from "@/components/courts/CourtDeleteDialog";
-import { useCourtsQuery, useAyoFieldsQuery } from "@/lib/hooks/useCourts";
+import { useCourtsQuery, useAyoFieldsQuery, useMapAyoFieldMutation } from "@/lib/hooks/useCourts";
 import { Court, CourtType, CourtStatus, AyoField } from "@/lib/types/courts.types";
 import {
   Table,
@@ -65,6 +65,13 @@ export default function CourtsPage() {
   const [selectedAyoField, setSelectedAyoField] = useState<AyoField | null>(null);
   const [isAyoViewOpen, setIsAyoViewOpen] = useState(false);
 
+  // Manual Mapping State
+  const [isMappingOpen, setIsMappingOpen] = useState(false);
+  const [selectedMappingAyoField, setSelectedMappingAyoField] = useState<AyoField | null>(null);
+  const [mappingTargetCourtId, setMappingTargetCourtId] = useState<string>("");
+
+  const mapAyoFieldMutation = useMapAyoFieldMutation();
+
   const handleEdit = (court: Court) => {
     setSelectedCourt(court);
     setIsEditOpen(true);
@@ -83,6 +90,19 @@ export default function CourtsPage() {
   const allCourts = courts || [];
   const activeCourts = allCourts.filter(c => c.status === CourtStatus.ACTIVE).length;
   const maintenanceCourts = allCourts.filter(c => c.status === CourtStatus.MAINTENANCE).length;
+
+  const handleMapSubmit = async () => {
+    if (!selectedMappingAyoField || !mappingTargetCourtId) return;
+
+    await mapAyoFieldMutation.mutateAsync({
+      courtId: mappingTargetCourtId,
+      ayoFieldId: selectedMappingAyoField.id
+    });
+
+    setIsMappingOpen(false);
+    setSelectedMappingAyoField(null);
+    setMappingTargetCourtId("");
+  };
 
   return (
     <MainLayout>
@@ -247,7 +267,21 @@ export default function CourtsPage() {
                                 </span>
                               )}
                             </TableCell>
-                            <TableCell className="text-right">
+                            <TableCell className="text-right space-x-2">
+                              {!isMapped && (
+                                <Button
+                                  variant="default"
+                                  size="sm"
+                                  className="bg-[var(--brand)] hover:bg-[var(--brand-dark)]"
+                                  onClick={() => {
+                                    setSelectedMappingAyoField(field);
+                                    setMappingTargetCourtId("");
+                                    setIsMappingOpen(true);
+                                  }}
+                                >
+                                  Map to Internal Court
+                                </Button>
+                              )}
                               <Button
                                 variant="outline"
                                 size="sm"
@@ -334,6 +368,57 @@ export default function CourtsPage() {
             ) : (
               <div className="p-4 text-center text-muted-foreground">No data available</div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Manual Mapping Dialog */}
+        <Dialog open={isMappingOpen} onOpenChange={setIsMappingOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Map Ayo.co.id Field</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="rounded-md bg-muted/50 p-3">
+                <p className="text-sm font-medium">Selected Ayo Field:</p>
+                <p className="text-lg font-bold">{selectedMappingAyoField?.name || "Unnamed Field"} (ID: #{selectedMappingAyoField?.id})</p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-muted-foreground">Select internal court to map with:</p>
+                <Select
+                  value={mappingTargetCourtId}
+                  onValueChange={setMappingTargetCourtId}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="-- Select Internal Court --" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {allCourts.map(court => (
+                      <SelectItem
+                        key={court.id}
+                        value={court.id}
+                        disabled={!!court.ayoFieldId && court.ayoFieldId !== String(selectedMappingAyoField?.id)}
+                      >
+                        {court.name} {court.ayoFieldId ? "(Already Mapped)" : ""}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <Button variant="outline" onClick={() => setIsMappingOpen(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleMapSubmit}
+                  disabled={!mappingTargetCourtId || mapAyoFieldMutation.isPending}
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-dark)]"
+                >
+                  {mapAyoFieldMutation.isPending ? "Mapping..." : "Save Mapping"}
+                </Button>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
 

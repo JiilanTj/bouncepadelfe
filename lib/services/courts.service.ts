@@ -92,6 +92,13 @@ export const courtsService = {
      */
     async getAyoFields(): Promise<import("@/lib/types/courts.types").AyoFieldsResponse> {
         return api.get<import("@/lib/types/courts.types").AyoFieldsResponse>("/courts/ayo-fields");
+    },
+
+    /**
+     * Manually map an internal court to an Ayo.co.id venue field
+     */
+    async mapAyoField(courtId: string, ayoFieldId: number | string): Promise<CourtResponse> {
+        return api.patch<CourtResponse>(`/courts/${courtId}/map-ayo`, { ayoFieldId });
     }
 };
 
