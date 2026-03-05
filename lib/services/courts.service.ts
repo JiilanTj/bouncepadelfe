@@ -4,6 +4,7 @@ import {
     UpdateCourtInput,
     CourtsResponse,
     CourtResponse,
+    SyncAyoResponse,
 } from "@/lib/types/courts.types";
 
 /**
@@ -77,4 +78,20 @@ export const courtsService = {
     async delete(id: string): Promise<CourtResponse> {
         return api.delete<CourtResponse>(`/courts/${id}`);
     },
+
+    /**
+     * Sync internal courts with Ayo.co.id venue fields.
+     * Matches by name, updates ayo_field_id in internal DB.
+     */
+    async syncWithAyo(): Promise<SyncAyoResponse> {
+        return api.post<SyncAyoResponse>("/courts/sync-ayo");
+    },
+
+    /**
+     * Get raw list of venue fields from Ayo.co.id
+     */
+    async getAyoFields(): Promise<import("@/lib/types/courts.types").AyoFieldsResponse> {
+        return api.get<import("@/lib/types/courts.types").AyoFieldsResponse>("/courts/ayo-fields");
+    }
 };
+

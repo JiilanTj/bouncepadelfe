@@ -81,3 +81,40 @@ export function useDeleteCourtMutation() {
         }
     });
 }
+
+export function useSyncWithAyoMutation() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => courtsService.syncWithAyo(),
+        onSuccess: (response) => {
+            queryClient.invalidateQueries({ queryKey: COURTS_QUERY_KEY });
+            const { synced, unmatched_courts, unmatched_ayo_fields } = response.data;
+            toast.success(
+                `Sync selesai: ${synced.length} lapangan tersinkronisasi` +
+                (unmatched_courts.length > 0
+                    ? `, ${unmatched_courts.length} lapangan internal tidak ditemukan di Ayo`
+                    : "") +
+                (unmatched_ayo_fields.length > 0
+                    ? `, ${unmatched_ayo_fields.length} lapangan Ayo tidak ada di internal`
+                    : ""),
+                { duration: 6000 }
+            );
+        },
+        onError: (error: AxiosError<ApiErrorResponse>) => {
+            console.error("Sync Ayo error:", error);
+            toast.error(error.response?.data?.message || "Gagal sinkronisasi dengan Ayo.co.id");
+        }
+    });
+}
+
+export function useAyoFieldsQuery() {
+    return useQuery({
+        queryKey: ["ayo-fields"],
+        queryFn: async () => {
+            const response = await courtsService.getAyoFields();
+            return response.data;
+        },
+    });
+}
+

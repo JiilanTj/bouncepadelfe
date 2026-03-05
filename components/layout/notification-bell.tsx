@@ -63,7 +63,7 @@ export function NotificationBell() {
   // Fetch initial notifications and unread count
   const fetchNotifications = useCallback(async () => {
     try {
-      const response = await notificationService.getNotifications(1, 10);
+      const response = await notificationService.getNotifications(1, 10, true);
       setNotifications(response.data);
       setUnreadCount(response.meta.unreadCount);
     } catch {
@@ -317,11 +317,21 @@ export function NotificationBell() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer justify-center text-center text-sm text-[var(--brand-600)]"
-              onClick={() => {
-                window.location.href = "/dashboard/notifications";
+              onClick={async () => {
+                try {
+                  await notificationService.markAllAsRead();
+                  setNotifications((prev) =>
+                    prev.map((n) => ({ ...n, isRead: true, readAt: new Date().toISOString() }))
+                  );
+                  setUnreadCount(0);
+                  setIsOpen(false);
+                  toast.success("Semua notifikasi ditandai sudah dibaca");
+                } catch {
+                  toast.error("Gagal menandai semua notifikasi");
+                }
               }}
             >
-              Lihat Semua Notifikasi
+              Tandai Semua Sudah Dibaca
             </DropdownMenuItem>
           </>
         )}

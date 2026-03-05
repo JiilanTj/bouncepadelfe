@@ -55,3 +55,45 @@ export interface CourtResponse {
     message: string;
     data: Court;
 }
+
+export interface SyncedCourt {
+    courtId: string;
+    courtName: string;
+    ayoFieldId: number;
+    ayoFieldName: string;
+}
+
+export interface UnmatchedField {
+    id: number;
+    name: string;
+}
+
+export interface UnmatchedCourt {
+    id: string;
+    name: string;
+}
+
+export interface SyncAyoResult {
+    synced: SyncedCourt[];
+    unmatched_ayo_fields: UnmatchedField[];
+    unmatched_courts: UnmatchedCourt[];
+    total_ayo_fields: number;
+    total_internal_courts: number;
+}
+
+export interface SyncAyoResponse {
+    message: string;
+    data: SyncAyoResult;
+}
+
+export interface AyoField {
+    id: number;
+    name: string;
+    [key: string]: unknown;
+}
+
+export interface AyoFieldsResponse {
+    message: string;
+    data: AyoField[];
+}
+
