@@ -90,3 +90,23 @@ export function useCourtAvailabilityQuery(courtId: string, date?: string) {
         enabled: !!courtId,
     });
 }
+
+export function useSyncBookingsWithAyoMutation() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (params?: { start_date?: string, end_date?: string }) => bookingService.syncWithAyo(params),
+        onSuccess: (response) => {
+            queryClient.invalidateQueries({ queryKey: BOOKING_QUERY_KEY });
+            const { newInserted, existingUpdated, skippedUnmapped } = response.data;
+            toast.success(
+                `Sync complete! Inserted: ${newInserted}, Updated: ${existingUpdated}, Skipped (Unmapped): ${skippedUnmapped}`,
+                { duration: 5000 }
+            );
+        },
+        onError: (error: AxiosError<ApiErrorResponse>) => {
+            console.error("Sync bookings with Ayo error:", error);
+            toast.error(error.response?.data?.message || "Failed to sync bookings from Ayo");
+        },
+    });
+}

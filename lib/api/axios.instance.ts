@@ -11,7 +11,7 @@ const TOKEN_KEY = "accessToken";
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 60000, // Increased to 60s for external sync processes
   headers: {
     "Content-Type": "application/json",
   },

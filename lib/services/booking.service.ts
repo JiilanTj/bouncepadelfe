@@ -36,5 +36,10 @@ export const bookingService = {
     // GET /bookings/availability/:id
     getAvailability: (courtId: string, date?: string): Promise<AxiosResponse<BookingSlot[]>> => {
         return api.get(`/bookings/availability/${courtId}`, { params: { date } });
+    },
+
+    // POST /bookings/sync-ayo
+    syncWithAyo: (params?: { start_date?: string, end_date?: string }): Promise<AxiosResponse<{ newInserted: number, existingUpdated: number, skippedUnmapped: number }>> => {
+        return api.post("/bookings/sync-ayo", {}, { params });
     }
 };
