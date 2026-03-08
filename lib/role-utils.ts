@@ -45,6 +45,7 @@ export const menuItems: MenuItem[] = [
 
   { name: "Users", href: "/users", icon: "Users", roles: ["OWNER"] },
   { name: "Reports", href: "/reports", icon: "BarChart3", roles: ["OWNER"] },
+  { name: "Sync History", href: "/sync-history", icon: "History", roles: ["OWNER", "ADMIN", "KASIR"] },
   { name: "Settings", href: "/settings", icon: "Settings", roles: ["OWNER", "ADMIN"] },
 ];
 
@@ -174,6 +175,7 @@ export const ROLE_ROUTES: Record<UserRole, string[]> = {
     "/master-data/facilities",
     "/users",
     "/reports",
+    "/sync-history",
     "/settings",
   ],
   ADMIN: [
@@ -193,6 +195,7 @@ export const ROLE_ROUTES: Record<UserRole, string[]> = {
     "/master-data/inventory",
     "/master-data/courts",
     "/master-data/facilities",
+    "/sync-history",
     "/settings",
   ],
   KASIR: [
@@ -204,6 +207,7 @@ export const ROLE_ROUTES: Record<UserRole, string[]> = {
     "/store-product",
     "/rental",
     "/tables",
+    "/sync-history",
   ],
 };
 

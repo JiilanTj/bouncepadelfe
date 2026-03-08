@@ -30,6 +30,7 @@ const ROLE_ROUTES = {
     "/master-data/facilities",
     "/users",
     "/reports",
+    "/sync-history",
     "/settings",
     "/dashboard/order-requests",
   ],
@@ -51,6 +52,7 @@ const ROLE_ROUTES = {
     "/master-data/inventory",
     "/master-data/courts",
     "/master-data/facilities",
+    "/sync-history",
     "/settings",
     "/dashboard/order-requests",
   ],
@@ -64,6 +66,7 @@ const ROLE_ROUTES = {
     "/store-product",
     "/rental",
     "/tables",
+    "/sync-history",
     "/dashboard/order-requests",
   ],
 };

@@ -29,6 +29,7 @@ import {
   Grid3X3,
   Building2,
   ClipboardCheck,
+  History,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -50,6 +51,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Grid3X3,
   Building2,
   ClipboardCheck,
+  History,
 };
 
 // Racket icon component
@@ -185,11 +187,11 @@ export function Sidebar({ userRole, userName }: SidebarProps) {
       {/* Logo */}
       <div className="flex h-16 items-center border-b border-[var(--gray-200)] bg-white px-6">
         <Link href="/dashboard" className="flex items-center">
-          <Image 
-            src="/logotypes.png" 
-            alt="BouncePadel Logo" 
-            width={160} 
-            height={40} 
+          <Image
+            src="/logotypes.png"
+            alt="BouncePadel Logo"
+            width={160}
+            height={40}
             className="h-auto w-full max-w-[140px] object-contain"
             priority
           />
