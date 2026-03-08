@@ -183,9 +183,9 @@ export function Sidebar({ userRole, userName }: SidebarProps) {
   };
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-[var(--gray-200)] bg-white">
+    <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-[var(--gray-200)] bg-white">
       {/* Logo */}
-      <div className="flex h-16 items-center border-b border-[var(--gray-200)] bg-white px-6">
+      <div className="flex h-16 flex-shrink-0 items-center border-b border-[var(--gray-200)] bg-white px-6">
         <Link href="/dashboard" className="flex items-center">
           <Image
             src="/logotypes.png"
@@ -199,7 +199,7 @@ export function Sidebar({ userRole, userName }: SidebarProps) {
       </div>
 
       {/* User Info */}
-      <div className="border-b border-[var(--gray-200)] bg-white px-6 py-4">
+      <div className="flex-shrink-0 border-b border-[var(--gray-200)] bg-white px-6 py-4">
         <p className="text-sm font-medium text-[var(--gray-900)]">{userName || "User"}</p>
         <Badge
           variant="outline"
@@ -210,7 +210,7 @@ export function Sidebar({ userRole, userName }: SidebarProps) {
       </div>
 
       {/* Navigation - Scrollable */}
-      <div className="h-[calc(100vh-180px)] overflow-y-auto px-3 py-4">
+      <div className="flex-1 overflow-y-auto px-3 py-4">
         <nav className="flex flex-col gap-1">
           {menuItems.map((item) => {
             if (item.children) {
@@ -230,7 +230,7 @@ export function Sidebar({ userRole, userName }: SidebarProps) {
       </div>
 
       {/* Footer */}
-      <div className="fixed bottom-0 left-0 w-64 border-t border-[var(--gray-200)] bg-white p-4">
+      <div className="flex-shrink-0 border-t border-[var(--gray-200)] bg-white p-4">
         <p className="text-xs text-[var(--gray-500)]">© 2026 BouncePadel</p>
         <p className="text-xs text-[var(--gray-400)]">v0.1.0</p>
       </div>
