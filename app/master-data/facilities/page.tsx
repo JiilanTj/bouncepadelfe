@@ -23,6 +23,7 @@ import {
 import { FacilityFormDialog } from "@/components/facilities/FacilityFormDialog";
 import { FacilityDeleteDialog } from "@/components/facilities/FacilityDeleteDialog";
 import { useFacilitiesQuery } from "@/lib/hooks/useFacilities";
+import { useAuth } from "@/lib/hooks/useAuth";
 import { Facility } from "@/lib/types/facilities.types";
 import {
   Building2,
@@ -43,6 +44,9 @@ export default function FacilitiesPage() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
+
+  const { user } = useAuth();
+  const canManageStatus = user?.role === "OWNER" || user?.role === "ADMIN";
 
   const handleEdit = (facility: Facility) => {
     setSelectedFacility(facility);
@@ -234,13 +238,15 @@ export default function FacilitiesPage() {
                                   <Pencil className="mr-2 h-4 w-4" />
                                   Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleDelete(facility)}
-                                  className="cursor-pointer text-[var(--status-danger)]"
-                                >
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  Delete
-                                </DropdownMenuItem>
+                                {canManageStatus && (
+                                  <DropdownMenuItem
+                                    onClick={() => handleDelete(facility)}
+                                    className="cursor-pointer text-[var(--status-danger)]"
+                                  >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Delete
+                                  </DropdownMenuItem>
+                                )}
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>

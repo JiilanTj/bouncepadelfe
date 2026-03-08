@@ -69,9 +69,24 @@ const ROLE_ROUTES = {
     "/sync-history",
     "/dashboard/order-requests",
   ],
+  INPUTER: [
+    "/dashboard",
+    "/booking",
+    "/courts",
+    "/transactions",
+    "/master-data",
+    "/master-data/product-category",
+    "/master-data/menu-category",
+    "/master-data/products",
+    "/master-data/menu",
+    "/master-data/inventory",
+    "/master-data/courts",
+    "/master-data/facilities",
+    "/sync-history"
+  ],
 };
 
-type UserRole = "OWNER" | "ADMIN" | "KASIR";
+type UserRole = "OWNER" | "ADMIN" | "INPUTER" | "KASIR";
 
 // ------------------------------------------------------------------------------
 // Helper Functions

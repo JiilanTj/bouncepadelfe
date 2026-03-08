@@ -1,4 +1,4 @@
-export type Role = "OWNER" | "ADMIN" | "KASIR";
+export type Role = "OWNER" | "ADMIN" | "INPUTER" | "KASIR";
 export type UserRole = Role;
 
 export interface User {

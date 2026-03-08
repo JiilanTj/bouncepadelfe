@@ -58,6 +58,7 @@ export const users: User[] = [
   { id: "3", name: "Mike Kasir", email: "kasir@padel.com", role: "KASIR", status: "ACTIVE" },
   { id: "4", name: "Sarah Admin", email: "sarah@padel.com", role: "ADMIN", status: "ACTIVE" },
   { id: "5", name: "Tom Kasir", email: "tom@padel.com", role: "KASIR", status: "INACTIVE" },
+  { id: "6", name: "Data Inputer", email: "inputer@padel.com", role: "INPUTER", status: "ACTIVE" },
 ];
 
 // Courts

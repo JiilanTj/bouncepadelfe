@@ -35,6 +35,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 interface InventoryTableProps {
   data: Inventory[];
@@ -61,6 +62,9 @@ export function InventoryTable({
   onDispose,
   isDisposePending = false,
 }: InventoryTableProps) {
+  const { user } = useAuth();
+  const canManageStatus = user?.role === "OWNER" || user?.role === "ADMIN";
+
   const getTypeBadge = (type: InventoryType) => {
     if (type === "ASSET") {
       return (
@@ -247,7 +251,7 @@ export function InventoryTable({
                                 <History className="mr-2 h-4 w-4" />
                                 View History
                               </DropdownMenuItem>
-                              {item.status !== "DISPOSED" && (
+                              {canManageStatus && item.status !== "DISPOSED" && (
                                 <DropdownMenuItem
                                   onClick={() => onDispose(item)}
                                   className="cursor-pointer text-[var(--status-danger)]"

@@ -44,6 +44,7 @@ import {
   useActivateProduct,
   useProductCategories,
 } from "@/lib/hooks";
+import { useAuth } from "@/lib/hooks/useAuth";
 import { CreateProductInput, UpdateProductInput, Product, ProductType } from "@/lib/types";
 import { formatDate, formatRupiah } from "@/lib/utils";
 import {
@@ -101,6 +102,9 @@ export default function ProductsPage() {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+
+  const { user } = useAuth();
+  const canManageStatus = user?.role === "OWNER" || user?.role === "ADMIN";
 
   const { data: productsData, isLoading } = useProducts({
     page,
@@ -194,12 +198,12 @@ export default function ProductsPage() {
 
     try {
       const submitData: CreateProductInput = {
-      ...formData,
-      price: priceNum,
-      cost_price: costPriceNum,
-      stock: stockNum,
-      image: imageFile || undefined,
-    };
+        ...formData,
+        price: priceNum,
+        cost_price: costPriceNum,
+        stock: stockNum,
+        image: imageFile || undefined,
+      };
 
       if (editingProduct) {
         await updateMutation.mutateAsync({ id: editingProduct.id, data: submitData as UpdateProductInput });
@@ -347,14 +351,16 @@ export default function ProductsPage() {
                                 <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                   <DropdownMenuItem onClick={() => handleOpenEdit(p)} className="cursor-pointer"><Pencil className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
-                                  {p.isActive ? (
-                                    <DropdownMenuItem onClick={() => handleDeleteClick(p)} className="cursor-pointer text-[var(--status-danger)]" disabled={deleteMutation.isPending}>
-                                      <Trash2 className="mr-2 h-4 w-4" />Deactivate
-                                    </DropdownMenuItem>
-                                  ) : (
-                                    <DropdownMenuItem onClick={() => handleActivate(p.id)} className="cursor-pointer text-[var(--status-success)]" disabled={activateMutation.isPending}>
-                                      <CheckCircle className="mr-2 h-4 w-4" />Activate
-                                    </DropdownMenuItem>
+                                  {canManageStatus && (
+                                    p.isActive ? (
+                                      <DropdownMenuItem onClick={() => handleDeleteClick(p)} className="cursor-pointer text-[var(--status-danger)]" disabled={deleteMutation.isPending}>
+                                        <Trash2 className="mr-2 h-4 w-4" />Deactivate
+                                      </DropdownMenuItem>
+                                    ) : (
+                                      <DropdownMenuItem onClick={() => handleActivate(p.id)} className="cursor-pointer text-[var(--status-success)]" disabled={activateMutation.isPending}>
+                                        <CheckCircle className="mr-2 h-4 w-4" />Activate
+                                      </DropdownMenuItem>
+                                    )
                                   )}
                                 </DropdownMenuContent>
                               </DropdownMenu>

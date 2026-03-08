@@ -13,7 +13,7 @@ export const loginSchema = z.object({
     .string()
     .min(1, "Password is required")
     .min(6, "Password must be at least 6 characters"),
-  role: z.enum(["OWNER", "ADMIN", "KASIR"]).optional(),
+  role: z.enum(["OWNER", "ADMIN", "INPUTER", "KASIR"]).optional(),
 });
 
 export type LoginFormData = z.infer<typeof loginSchema>;
@@ -38,7 +38,7 @@ export const registerSchema = z.object({
   confirmPassword: z
     .string()
     .min(1, "Please confirm your password"),
-  role: z.enum(["OWNER", "ADMIN", "KASIR"]).optional(),
+  role: z.enum(["OWNER", "ADMIN", "INPUTER", "KASIR"]).optional(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],

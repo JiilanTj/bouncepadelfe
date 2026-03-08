@@ -24,7 +24,7 @@ export interface RegisterInput {
   name: string;
   email: string;
   password: string;
-  role?: "OWNER" | "ADMIN" | "KASIR";
+  role?: "OWNER" | "ADMIN" | "INPUTER" | "KASIR";
 }
 
 export interface RegisterResponse {

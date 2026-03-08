@@ -53,10 +53,10 @@ export default function UsersPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  
+
   // Form states
   const [formData, setFormData] = useState<CreateUserInput>({
     name: "",
@@ -73,6 +73,7 @@ export default function UsersPage() {
 
   const ownerCount = userList.filter((u) => u.role === "OWNER").length;
   const adminCount = userList.filter((u) => u.role === "ADMIN").length;
+  const inputerCount = userList.filter((u) => u.role === "INPUTER").length;
   const kasirCount = userList.filter((u) => u.role === "KASIR").length;
 
   const handleCreateUser = async () => {
@@ -96,7 +97,7 @@ export default function UsersPage() {
       if (formData.password) {
         updateData.password = formData.password;
       }
-      
+
       await updateUserMutation.mutateAsync({ id: selectedUser.id, data: updateData });
       setIsEditDialogOpen(false);
       setSelectedUser(null);
@@ -126,7 +127,7 @@ export default function UsersPage() {
     });
     setIsEditDialogOpen(true);
   };
-  
+
   const openDeleteDialog = (user: User) => {
     setSelectedUser(user);
     setIsDeleteDialogOpen(true);
@@ -144,7 +145,7 @@ export default function UsersPage() {
             <h2 className="text-2xl font-bold text-[var(--gray-900)]">User Management</h2>
             <p className="text-sm text-[var(--gray-500)]">Manage system users and access</p>
           </div>
-          
+
           {canManage && (
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
@@ -163,34 +164,35 @@ export default function UsersPage() {
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input 
-                      id="name" 
-                      value={formData.name} 
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      placeholder="Enter full name" 
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Enter full name"
                     />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      value={formData.email} 
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      placeholder="Enter email address" 
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="Enter email address"
                     />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="role">Role</Label>
-                    <Select 
-                      value={formData.role} 
-                      onValueChange={(val: Role) => setFormData({...formData, role: val})}
+                    <Select
+                      value={formData.role}
+                      onValueChange={(val: Role) => setFormData({ ...formData, role: val })}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select role" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="ADMIN">Admin</SelectItem>
+                        <SelectItem value="INPUTER">Inputer</SelectItem>
                         <SelectItem value="KASIR">Kasir</SelectItem>
                         <SelectItem value="OWNER">Owner</SelectItem>
                       </SelectContent>
@@ -198,12 +200,12 @@ export default function UsersPage() {
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input 
-                      id="password" 
-                      type="password" 
-                      value={formData.password} 
-                      onChange={(e) => setFormData({...formData, password: e.target.value})}
-                      placeholder="Enter password" 
+                    <Input
+                      id="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      placeholder="Enter password"
                     />
                   </div>
                 </div>
@@ -225,7 +227,7 @@ export default function UsersPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid gap-4 sm:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-5">
           <Card className="border-0 shadow-sm">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
@@ -261,6 +263,19 @@ export default function UsersPage() {
                 <div>
                   <p className="text-2xl font-bold text-[var(--gray-900)]">{adminCount}</p>
                   <p className="text-sm text-[var(--gray-500)]">Admins</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-0 shadow-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--role-inputer-bg)]">
+                  <UserIcon className="h-6 w-6 text-[var(--role-inputer)]" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-[var(--gray-900)]">{inputerCount}</p>
+                  <p className="text-sm text-[var(--gray-500)]">Inputers</p>
                 </div>
               </div>
             </CardContent>
@@ -354,7 +369,7 @@ export default function UsersPage() {
                                 <Pencil className="mr-2 h-4 w-4" />
                                 Edit
                               </DropdownMenuItem>
-                              <DropdownMenuItem 
+                              <DropdownMenuItem
                                 className="text-red-600"
                                 onClick={() => openDeleteDialog(user)}
                               >
@@ -372,7 +387,7 @@ export default function UsersPage() {
             </Table>
           </CardContent>
         </Card>
-        
+
         {/* Edit Dialog */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="sm:max-w-[500px]">
@@ -385,34 +400,35 @@ export default function UsersPage() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="edit-name">Full Name</Label>
-                <Input 
-                  id="edit-name" 
-                  value={formData.name} 
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  placeholder="Enter full name" 
+                <Input
+                  id="edit-name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Enter full name"
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="edit-email">Email</Label>
-                <Input 
-                  id="edit-email" 
-                  type="email" 
-                  value={formData.email} 
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  placeholder="Enter email address" 
+                <Input
+                  id="edit-email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="Enter email address"
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="edit-role">Role</Label>
-                <Select 
-                  value={formData.role} 
-                  onValueChange={(val: Role) => setFormData({...formData, role: val})}
+                <Select
+                  value={formData.role}
+                  onValueChange={(val: Role) => setFormData({ ...formData, role: val })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="ADMIN">Admin</SelectItem>
+                    <SelectItem value="INPUTER">Inputer</SelectItem>
                     <SelectItem value="KASIR">Kasir</SelectItem>
                     <SelectItem value="OWNER">Owner</SelectItem>
                   </SelectContent>
@@ -420,12 +436,12 @@ export default function UsersPage() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="edit-password">Password (Optional)</Label>
-                <Input 
-                  id="edit-password" 
-                  type="password" 
-                  value={formData.password} 
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  placeholder="Leave blank to keep unchanged" 
+                <Input
+                  id="edit-password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Leave blank to keep unchanged"
                 />
               </div>
             </div>
@@ -446,30 +462,30 @@ export default function UsersPage() {
 
         {/* Delete Dialog */}
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-           <DialogContent className="sm:max-w-md">
-             <DialogHeader>
-               <DialogTitle>Delete User</DialogTitle>
-               <DialogDescription>
-                 Are you sure you want to delete this user? This action cannot be undone.
-               </DialogDescription>
-             </DialogHeader>
-             <DialogFooter className="sm:justify-end">
-               <Button
-                 variant="secondary"
-                 onClick={() => setIsDeleteDialogOpen(false)}
-                 disabled={deleteUserMutation.isPending}
-               >
-                 Cancel
-               </Button>
-               <Button
-                 variant="destructive"
-                 onClick={handleDeleteUser}
-                 disabled={deleteUserMutation.isPending}
-               >
-                 {deleteUserMutation.isPending ? "Deleting..." : "Delete User"}
-               </Button>
-             </DialogFooter>
-           </DialogContent>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Delete User</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete this user? This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="sm:justify-end">
+              <Button
+                variant="secondary"
+                onClick={() => setIsDeleteDialogOpen(false)}
+                disabled={deleteUserMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteUser}
+                disabled={deleteUserMutation.isPending}
+              >
+                {deleteUserMutation.isPending ? "Deleting..." : "Delete User"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
         </Dialog>
       </div>
     </MainLayout>

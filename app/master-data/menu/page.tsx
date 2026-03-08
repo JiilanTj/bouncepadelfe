@@ -45,6 +45,7 @@ import {
   useActivateMenu,
   useMenuCategories,
 } from "@/lib/hooks";
+import { useAuth } from "@/lib/hooks/useAuth";
 import { CreateMenuInput, UpdateMenuInput, Menu } from "@/lib/types";
 import { formatRupiah } from "@/lib/utils";
 import {
@@ -102,6 +103,9 @@ export default function MenuPage() {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [menuToDelete, setMenuToDelete] = useState<Menu | null>(null);
+
+  const { user } = useAuth();
+  const canManageStatus = user?.role === "OWNER" || user?.role === "ADMIN";
 
   const { data: menusData, isLoading } = useMenus({
     page,
@@ -350,10 +354,12 @@ export default function MenuPage() {
                                 <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                   <DropdownMenuItem onClick={() => handleOpenEdit(m)} className="cursor-pointer"><Pencil className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
-                                  {m.isActive ? (
-                                    <DropdownMenuItem onClick={() => handleDeleteClick(m)} className="cursor-pointer text-[var(--status-danger)]" disabled={deleteMutation.isPending}><Trash2 className="mr-2 h-4 w-4" />Deactivate</DropdownMenuItem>
-                                  ) : (
-                                    <DropdownMenuItem onClick={() => handleActivate(m.id)} className="cursor-pointer text-[var(--status-success)]" disabled={activateMutation.isPending}><CheckCircle className="mr-2 h-4 w-4" />Activate</DropdownMenuItem>
+                                  {canManageStatus && (
+                                    m.isActive ? (
+                                      <DropdownMenuItem onClick={() => handleDeleteClick(m)} className="cursor-pointer text-[var(--status-danger)]" disabled={deleteMutation.isPending}><Trash2 className="mr-2 h-4 w-4" />Deactivate</DropdownMenuItem>
+                                    ) : (
+                                      <DropdownMenuItem onClick={() => handleActivate(m.id)} className="cursor-pointer text-[var(--status-success)]" disabled={activateMutation.isPending}><CheckCircle className="mr-2 h-4 w-4" />Activate</DropdownMenuItem>
+                                    )
                                   )}
                                 </DropdownMenuContent>
                               </DropdownMenu>
@@ -422,9 +428,9 @@ export default function MenuPage() {
                 {editingMenu && (
                   <div className="space-y-2 sm:col-span-2">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                    <input type="checkbox" id="available" checked={formData.is_available} onChange={(e) => setFormData({ ...formData, is_available: e.target.checked })} className="h-4 w-4 rounded border-gray-300 text-[var(--brand)] focus:ring-[var(--brand)]" />
-                    <span>Available in POS</span>
-                  </label>
+                      <input type="checkbox" id="available" checked={formData.is_available} onChange={(e) => setFormData({ ...formData, is_available: e.target.checked })} className="h-4 w-4 rounded border-gray-300 text-[var(--brand)] focus:ring-[var(--brand)]" />
+                      <span>Available in POS</span>
+                    </label>
                     <p className="text-xs text-[var(--gray-500)]">Uncheck to hide this item from POS</p>
                   </div>
                 )}

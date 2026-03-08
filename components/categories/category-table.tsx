@@ -23,6 +23,7 @@ import { Category, CategoryType, CreateCategoryInput, UpdateCategoryInput } from
 import { formatDate } from "@/lib/utils";
 import { Search, Plus, MoreHorizontal, Pencil, Trash2, FolderTree, Utensils, ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { DeleteCategoryDialog } from "./delete-category-dialog";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 interface CategoryTableProps {
   type: CategoryType;
@@ -72,6 +73,9 @@ export function CategoryTable({
   const title = isProduct ? "Product Category" : "Menu Category";
   const Icon = isProduct ? FolderTree : Utensils;
 
+  const { user } = useAuth();
+  const canManageStatus = user?.role === "OWNER" || user?.role === "ADMIN";
+
   const filteredCategories = categories.filter(
     (cat) =>
       cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -98,7 +102,7 @@ export function CategoryTable({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       toast.error("Name is required");
       return;
@@ -236,25 +240,27 @@ export function CategoryTable({
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
-                        
-                        {category.isActive ? (
-                          <DropdownMenuItem
-                            onClick={() => handleDeleteClick(category)}
-                            className="cursor-pointer text-[var(--status-danger)]"
-                            disabled={isDeleting}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Deactivate
-                          </DropdownMenuItem>
-                        ) : (
-                          <DropdownMenuItem
-                            onClick={() => onActivate(category.id)}
-                            className="cursor-pointer text-[var(--status-success)]"
-                            disabled={isActivating}
-                          >
-                            <CheckCircle className="mr-2 h-4 w-4" />
-                            Activate
-                          </DropdownMenuItem>
+
+                        {canManageStatus && (
+                          category.isActive ? (
+                            <DropdownMenuItem
+                              onClick={() => handleDeleteClick(category)}
+                              className="cursor-pointer text-[var(--status-danger)]"
+                              disabled={isDeleting}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Deactivate
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem
+                              onClick={() => onActivate(category.id)}
+                              className="cursor-pointer text-[var(--status-success)]"
+                              disabled={isActivating}
+                            >
+                              <CheckCircle className="mr-2 h-4 w-4" />
+                              Activate
+                            </DropdownMenuItem>
+                          )
                         )}
                       </DropdownMenuContent>
                     </DropdownMenu>

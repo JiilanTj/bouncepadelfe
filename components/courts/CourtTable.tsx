@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { Court, CourtType, CourtStatus } from "@/lib/types/courts.types";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 interface CourtTableProps {
   data: Court[];
@@ -34,6 +35,9 @@ interface CourtTableProps {
 }
 
 export function CourtTable({ data, onEdit, onDelete }: CourtTableProps) {
+  const { user } = useAuth();
+  const canManageStatus = user?.role === "OWNER" || user?.role === "ADMIN";
+
   const getStatusBadge = (status: CourtStatus) => {
     switch (status) {
       case CourtStatus.ACTIVE:
@@ -151,14 +155,18 @@ export function CourtTable({ data, onEdit, onDelete }: CourtTableProps) {
                         <Pencil className="mr-2 h-4 w-4" />
                         Edit Court
                       </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onClick={() => onDelete(court)}
-                        className="text-red-600 focus:bg-red-50 focus:text-red-600 cursor-pointer"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete Court
-                      </DropdownMenuItem>
+                      {canManageStatus && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => onDelete(court)}
+                            className="text-red-600 focus:bg-red-50 focus:text-red-600 cursor-pointer"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete Court
+                          </DropdownMenuItem>
+                        </>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

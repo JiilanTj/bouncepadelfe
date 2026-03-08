@@ -17,9 +17,9 @@ export interface MenuItem {
 // ------------------------------------------------------------------------------
 
 export const menuItems: MenuItem[] = [
-  { name: "Dashboard", href: "/dashboard", icon: "LayoutDashboard", roles: ["OWNER", "ADMIN", "KASIR"] },
-  { name: "Booking", href: "/booking", icon: "CalendarDays", roles: ["OWNER", "ADMIN", "KASIR"] },
-  { name: "Transactions", href: "/transactions", icon: "Receipt", roles: ["OWNER", "ADMIN", "KASIR"] },
+  { name: "Dashboard", href: "/dashboard", icon: "LayoutDashboard", roles: ["OWNER", "ADMIN", "INPUTER", "KASIR"] },
+  { name: "Booking", href: "/booking", icon: "CalendarDays", roles: ["OWNER", "ADMIN", "INPUTER", "KASIR"] },
+  { name: "Transactions", href: "/transactions", icon: "Receipt", roles: ["OWNER", "ADMIN", "INPUTER", "KASIR"] },
   { name: "POS", href: "/pos", icon: "ShoppingCart", roles: ["OWNER", "ADMIN", "KASIR"] },
   { name: "Store Product", href: "/store-product", icon: "Package", roles: ["OWNER", "ADMIN", "KASIR"] },
   { name: "Rental", href: "/rental", icon: "Racket", roles: ["OWNER", "ADMIN", "KASIR"] },
@@ -31,21 +31,21 @@ export const menuItems: MenuItem[] = [
     name: "Master Data",
     href: "/master-data",
     icon: "Database",
-    roles: ["OWNER", "ADMIN"],
+    roles: ["OWNER", "ADMIN", "INPUTER"],
     children: [
-      { name: "Product Category", href: "/master-data/product-category", icon: "FolderTree", roles: ["OWNER", "ADMIN"] },
-      { name: "Menu Category", href: "/master-data/menu-category", icon: "Utensils", roles: ["OWNER", "ADMIN"] },
-      { name: "Product Master Data", href: "/master-data/products", icon: "Boxes", roles: ["OWNER", "ADMIN"] },
-      { name: "Menu Master Data", href: "/master-data/menu", icon: "ClipboardList", roles: ["OWNER", "ADMIN"] },
-      { name: "Inventory", href: "/master-data/inventory", icon: "Package", roles: ["OWNER", "ADMIN"] },
-      { name: "Court Master Data", href: "/master-data/courts", icon: "Grid3X3", roles: ["OWNER", "ADMIN"] },
-      { name: "Facilities", href: "/master-data/facilities", icon: "Building2", roles: ["OWNER", "ADMIN"] },
+      { name: "Product Category", href: "/master-data/product-category", icon: "FolderTree", roles: ["OWNER", "ADMIN", "INPUTER"] },
+      { name: "Menu Category", href: "/master-data/menu-category", icon: "Utensils", roles: ["OWNER", "ADMIN", "INPUTER"] },
+      { name: "Product Master Data", href: "/master-data/products", icon: "Boxes", roles: ["OWNER", "ADMIN", "INPUTER"] },
+      { name: "Menu Master Data", href: "/master-data/menu", icon: "ClipboardList", roles: ["OWNER", "ADMIN", "INPUTER"] },
+      { name: "Inventory", href: "/master-data/inventory", icon: "Package", roles: ["OWNER", "ADMIN", "INPUTER"] },
+      { name: "Court Master Data", href: "/master-data/courts", icon: "Grid3X3", roles: ["OWNER", "ADMIN", "INPUTER"] },
+      { name: "Facilities", href: "/master-data/facilities", icon: "Building2", roles: ["OWNER", "ADMIN", "INPUTER"] },
     ],
   },
 
   { name: "Users", href: "/users", icon: "Users", roles: ["OWNER"] },
   { name: "Reports", href: "/reports", icon: "BarChart3", roles: ["OWNER"] },
-  { name: "Sync History", href: "/sync-history", icon: "History", roles: ["OWNER", "ADMIN", "KASIR"] },
+  { name: "Sync History", href: "/sync-history", icon: "History", roles: ["OWNER", "ADMIN", "INPUTER", "KASIR"] },
   { name: "Settings", href: "/settings", icon: "Settings", roles: ["OWNER", "ADMIN"] },
 ];
 
@@ -117,6 +117,8 @@ export function getRoleBadgeColor(role: UserRole): string {
       return "bg-[var(--role-owner-bg)] text-[var(--role-owner)] border-[var(--role-owner-border)]";
     case "ADMIN":
       return "bg-[var(--role-admin-bg)] text-[var(--role-admin)] border-[var(--role-admin-border)]";
+    case "INPUTER":
+      return "bg-[var(--role-inputer-bg)] text-[var(--role-inputer)] border-[var(--role-inputer-border)]";
     case "KASIR":
       return "bg-[var(--role-kasir-bg)] text-[var(--role-kasir)] border-[var(--role-kasir-border)]";
     default:
@@ -197,6 +199,20 @@ export const ROLE_ROUTES: Record<UserRole, string[]> = {
     "/master-data/facilities",
     "/sync-history",
     "/settings",
+  ],
+  INPUTER: [
+    "/dashboard",
+    "/booking",
+    "/transactions",
+    "/master-data",
+    "/master-data/product-category",
+    "/master-data/menu-category",
+    "/master-data/products",
+    "/master-data/menu",
+    "/master-data/inventory",
+    "/master-data/courts",
+    "/master-data/facilities",
+    "/sync-history",
   ],
   KASIR: [
     "/dashboard",
